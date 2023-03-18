@@ -11,12 +11,16 @@ let grantsObject = {
   admin: {
     // test: allRights,
     profile: allRights,
+    customers: allRights,
   },
   user: {
     // test: {'read:any': ['*'],},
     profile: {
       'read:own': ['*', '!password', '!_id'],
       'update:own': ['*', '!password', '!_id'],
+    },
+    customers: {
+      'read:any': ['*'],
     },
   },
 };
