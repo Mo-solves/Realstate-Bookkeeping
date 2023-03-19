@@ -11,12 +11,56 @@ const customersController = {
       next(err);
     }
   },
+  async getAllCustomers(req, res, next) {
+    try {
+      const customers = await customersService.findAllCustomers();
+      res.json(customers);
+    } catch (err) {
+      next(err);
+    }
+  },
   async getCustomerById(req, res, next) {
     try {
       const _id = req.params.id;
       const customer = await customersService.findCustomerById(_id);
-      console.log(customer.startingDate);
       res.json(customer);
+    } catch (err) {
+      next(err);
+    }
+  },
+  async getCustomerHistory(req, res, next) {
+    try {
+      const _id = req.params.id;
+      const customer = await customersService.findCustomerById(_id);
+      const customerHistory =
+        await customersService.findCustomerHistoryByPhoneNumber(
+          customer.phoneNumber
+        );
+      res.json(customerHistory);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async updateCustomerById(req, res, next) {
+    try {
+      const _id = req.params.id;
+      const customer = await customersService.findCustomerByIdAndUpdate(
+        _id,
+        req.body
+      );
+      await customer.save();
+      res.json(customer);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async deleteCustomerById(req, res, next) {
+    try {
+      const _id = req.params.id;
+      const customer = await customersService.findCustomerByIdAndDelete(_id);
+      res.status(httpStatus.OK).json({ action: 'deleted' });
     } catch (err) {
       next(err);
     }

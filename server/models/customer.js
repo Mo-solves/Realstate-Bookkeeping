@@ -22,12 +22,16 @@ const customerSchema = mongoose.Schema({
     maxLength: 50,
   },
   rentDue: {
-    type: SchemaTypes.Double,
+    type: Number,
     required: true,
   },
   rentPaid: {
-    type: SchemaTypes.Double,
+    type: Number,
     default: 0,
+  },
+  location: {
+    type: String,
+    required: true,
   },
   startingDate: {
     type: Date,
@@ -38,7 +42,7 @@ const customerSchema = mongoose.Schema({
     default: Date.now,
   },
   balance: {
-    type: SchemaTypes.Double,
+    type: Number,
     default: 0,
   },
   remainingDays: {
@@ -47,12 +51,8 @@ const customerSchema = mongoose.Schema({
   },
   history: {
     type: SchemaTypes.ObjectId,
-    fullname: String,
-    dueDate: Date,
-    rentDue: SchemaTypes.Double,
-    rentPaid: SchemaTypes.Double,
-    balance: SchemaTypes.Double,
-    default: {},
+    ref: 'history',
+    default: null,
   },
   createdDate: {
     type: Date,
@@ -60,56 +60,16 @@ const customerSchema = mongoose.Schema({
   },
 });
 
-customerSchema.methods.calculateRemainingDays = function (customer) {
-  // let startingDate = Date.now();
-
-  // let dueDate = new Date();
-  let differenceInTIme =
-    customer.dueDate.getTime() - customer.startingDate.getTime();
-  let differenceInDays = differenceInTIme / (1000 * 3600 * 24);
-  return Math.trunc(differenceInDays);
-};
-
-customerSchema.methods.addDaysToDate = function (date, days) {
-  date.setDate(date.getDate() + days);
-  return date;
-};
-
-customerSchema.pre('save', async function (next) {
-  let customer = this;
-  let balance = customer.rentDue - customer.rentPaid;
-  customer.dueDate = customer.addDaysToDate(customer.dueDate, 30);
-  customer.balance = balance;
-  customer.remainingDays = customer.calculateRemainingDays(customer);
+const historySchema = mongoose.Schema({
+  fullname: String,
+  startingDate: Date,
+  dueDate: Date,
+  rentDue: Number,
+  rentPaid: Number,
+  balance: Number,
+  phoneNumber: String,
 });
 
-customerSchema.methods.updateCustomerBasedOnRemainingDays = function (
-  customer
-) {
-  let differenceInTime = 0;
-  let remainingDays = 0;
-  customer.remainingDays = customer.calculateRemainingDays(customer);
-  console.log(customer.remainingDays);
-  if (customer.remainingDays < 1) {
-    customer.history = {
-      fullname: `${customer.firstname} ${customer.lastname}`,
-      dueDate: customer.dueDate,
-      rentDue: customer.rentDue,
-      rentPaid: customer.rentPaid,
-      balance: customer.balance,
-    };
-    customer.startingDate = new Date();
-    customer.dueDate = customer.addDaysToDate(customer.dueDate, 30);
-    customer.balance += customer.rentDue;
-    customer.rentPaid = 0;
-    differenceInTime = customer.dueDate.getTime() - new Date().getTime();
-    remainingDays = Math.trunc(differenceInTime / (1000 * 3600 * 24));
-    customer.remainingDays = remainingDays;
-  }
-  customer.remainingDays = remainingDays;
-  return customer;
-};
-
 const Customer = mongoose.model('Customer', customerSchema);
-
-module.exports = { Customer, customerSchema };
+const History = mongoose.model('History', historySchema);
+module.exports = { Customer, History };
