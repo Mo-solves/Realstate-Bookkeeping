@@ -31,4 +31,26 @@ router
   .route('/customer/:id/history/:phoneNumber')
   .get(auth('readAny', 'customers'), customersController.getCustomerHistory);
 
+router
+  .route('/more-history/:phoneNumber')
+  .get(
+    auth('readAny', 'customers'),
+    customersController.getSpecifiedNumberOfCustomers
+  )
+  .post(
+    auth('readAny', 'customers'),
+    customersController.getMoreCustomerHistory
+  );
+
+router.post(
+  '/admin/paginate',
+  auth('readAny', 'customers'),
+  customersController.adminPaginate
+);
+
+// router.post(
+//   '/customer/:id/history/:phoneNumber/admin/paginate',
+//   auth('readAny', 'customers'),
+//   customersController.adminPaginateHistory
+// );
 module.exports = router;

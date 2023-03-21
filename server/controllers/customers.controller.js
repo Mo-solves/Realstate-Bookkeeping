@@ -65,6 +65,41 @@ const customersController = {
       next(err);
     }
   },
+
+  async getSpecifiedNumberOfCustomers(req, res, next) {
+    try {
+      const customers = await customersService.allCustomers(req);
+      res.json(customers);
+    } catch (err) {
+      next();
+    }
+  },
+  async getMoreCustomerHistory(req, res, next) {
+    try {
+      const history = await customersService.moreHistory(req);
+      res.json(history);
+    } catch (err) {
+      next(err);
+    }
+  },
+  async adminPaginate(req, res, next) {
+    try {
+      const customers = await customersService.paginateAdminCustomers(req);
+      res.json(customers);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  // async adminPaginateHistory(req, res, next) {
+  //   try {
+  //     const history = await customersService.paginateAdminCustomersHistory(req);
+
+  //     res.json(history);
+  //   } catch (err) {
+  //     next(err);
+  //   }
+  // },
 };
 
 module.exports = customersController;

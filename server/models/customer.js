@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-require('mongoose-double')(mongoose);
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 require('dotenv').config();
 
 let SchemaTypes = mongoose.Schema.Types;
@@ -45,6 +45,10 @@ const customerSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  previousBalance: {
+    type: Number,
+    default: 0,
+  },
   remainingDays: {
     type: Number,
     default: 0,
@@ -69,6 +73,9 @@ const historySchema = mongoose.Schema({
   balance: Number,
   phoneNumber: String,
 });
+
+customerSchema.plugin(aggregatePaginate);
+historySchema.plugin(aggregatePaginate);
 
 const Customer = mongoose.model('Customer', customerSchema);
 const History = mongoose.model('History', historySchema);

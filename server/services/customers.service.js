@@ -40,17 +40,19 @@ const updateCustomerBasedOnRemainingDays = customer => {
   let differenceInTime = 0;
   let remainingDays = 0;
   customer.remainingDays = calculateRemainingDays(customer.dueDate);
+
   if (customer.remainingDays < 1) {
     createCustomerHistory(customer);
     customer.startingDate = new Date();
     customer.dueDate = addDaysToDueDate(30);
-    customer.balance += customer.rentDue;
+    customer.previousBalance = customer.balance;
+    customer.balance = customer.rentDue + customer.previousBalance;
     customer.rentPaid = 0;
     differenceInTime = customer.dueDate.getTime() - new Date().getTime();
     remainingDays = Math.trunc(differenceInTime / (1000 * 3600 * 24));
     customer.remainingDays = remainingDays;
   }
-  customer.remainingDays = remainingDays;
+
   return customer;
 };
 
@@ -73,7 +75,18 @@ const addCustomer = async body => {
 };
 
 const findAllCustomers = async () => {
-  return await Customer.find({});
+  try {
+    const customers = await Customer.find({});
+    if (!customers) throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
+    for (let customer of customers) {
+      updateCustomerBasedOnRemainingDays(customer);
+      await customer.save();
+    }
+
+    return customers;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const findCustomerById = async _id => {
@@ -82,9 +95,7 @@ const findCustomerById = async _id => {
     if (!customer)
       throw new ApiError(httpStatus.NOT_FOUND, 'Customer not found');
 
-    updateCustomerBasedOnRemainingDays(customer);
-
-    await customer.save();
+    // await customer.save();
     return customer;
   } catch (err) {
     throw err;
@@ -116,7 +127,8 @@ const findCustomerByIdAndUpdate = async (_id, body) => {
     if (!customer)
       throw new ApiError(httpStatus.NOT_FOUND, 'Customer not found');
 
-    customer.balance = customer.rentDue - customer.rentPaid;
+    customer.balance =
+      customer.rentDue + customer.previousBalance - customer.rentPaid;
 
     return customer;
   } catch (err) {
@@ -136,6 +148,77 @@ const findCustomerByIdAndDelete = async _id => {
   }
 };
 
+const allCustomers = async req => {
+  const sortby = req.query.sortby || '_id';
+  const order = req.query.order || 'desc';
+  const limit = req.query.limit || 2;
+  try {
+    const customers = await Customer.find({})
+      .sort([[sortby, order]])
+      .limit(parseInt(limit));
+    return customers;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const moreHistory = async req => {
+  const sortby = req.body.sortby || '_id';
+  const order = req.body.order || 'desc';
+  const limit = req.body.limit || 3;
+  const skip = req.body.skip || 0;
+  try {
+    const phoneNumber = req.params.phoneNumber;
+    console.log(phoneNumber);
+    const history = await History.find({ phoneNumber })
+      .sort([[sortby, order]])
+      .skip(skip)
+      .limit(parseInt(limit));
+    console.log(history);
+    return history;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const paginateAdminCustomers = async req => {
+  try {
+    let aggQuery = Customer.aggregate();
+    const limit = req.body.limit ? req.body.limit : 5;
+    const options = {
+      page: req.body.page,
+      limit,
+      sort: {
+        _id: 'desc',
+      },
+    };
+
+    const customers = await Customer.aggregatePaginate(aggQuery, options);
+    return customers;
+  } catch (err) {
+    throw err;
+  }
+};
+
+// const paginateAdminCustomersHistory = async req => {
+//   try {
+//     let aggQuery = History.aggregate();
+//     const limit = req.body.limit ? req.body.limit : 5;
+//     const options = {
+//       page: req.body.page,
+//       limit,
+//       sort: {
+//         _id: 'desc',
+//       },
+//     };
+//     const history = History.aggregatePaginate(aggQuery, options);
+
+//     return history;
+//   } catch (err) {
+//     throw err;
+//   }
+// };
+
 module.exports = {
   addCustomer,
   findCustomerById,
@@ -143,4 +226,8 @@ module.exports = {
   findAllCustomers,
   findCustomerByIdAndUpdate,
   findCustomerByIdAndDelete,
+  allCustomers,
+  moreHistory,
+  paginateAdminCustomers,
+  // paginateAdminCustomersHistory,
 };
