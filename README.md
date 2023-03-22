@@ -22,5 +22,3 @@
 - DB_HOST: which contains your database host
 - DB_USER: Your Database User
 - DB_PASSWORD: Your Database password
-
-# Install react modules
