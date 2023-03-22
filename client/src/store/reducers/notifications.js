@@ -1,11 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const notificationSlice = createSlice({
+export const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: {
     global: {},
   },
-  reducers: {},
+  reducers: {
+    errorGlobal: (state, action) => {
+      state.global.error = true;
+      state.global.msg = action.payload;
+    },
+    successGlobal: (state, action) => {
+      state.global.success = true;
+      state.global.msg = action.payload;
+    },
+    clearNotifications: state => {
+      state.global = {};
+    },
+  },
 });
 
-export default notificationSlice.reducer;
+export const { errorGlobal, successGlobal, clearNotifications } =
+  notificationsSlice.actions;
+export default notificationsSlice.reducer;
