@@ -1,27 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { errorHelper, Loader } from '../../utils/tools';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { errorHelper, Loader } from '../../utils/tools';
+
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 import { registerUser, signInUser } from '../../store/actions/users';
-
 import PreventSignIn from '../../hoc/preventSignIn';
 
 const Auth = () => {
+  // comp
   const [register, setRegister] = useState(false);
-  const navigate = useNavigate();
+  let navigate = useNavigate();
   // redux
   const users = useSelector(state => state.users);
   const notifications = useSelector(state => state.notifications);
   const dispatch = useDispatch();
+
   const formik = useFormik({
-    initialValues: { email: '', password: '' },
+    initialValues: {},
     validationSchema: Yup.object({
       email: Yup.string()
         .required('Sorry the email is required')
@@ -36,16 +38,13 @@ const Auth = () => {
   const handleSubmit = values => {
     if (register) {
       dispatch(registerUser(values));
-      console.log(values, 'register');
     } else {
       dispatch(signInUser(values));
-      console.log(values, 'sign in');
     }
   };
 
   useEffect(() => {
     if (notifications && notifications.global.success) {
-      // redirect
       navigate('/dashboard');
     }
   }, [notifications]);

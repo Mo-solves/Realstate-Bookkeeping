@@ -1,15 +1,19 @@
+import { useEffect, useState } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { isAuth } from './store/actions/users';
 import { Loader } from './utils/tools';
 
 import MainLayout from './hoc/mainLayout';
-import Home from './components/home';
 import Header from './components/navigation/header';
+import Home from './components/home';
 import Auth from './components/auth';
 
 import Dashboard from './components/dashboard';
+import DashboardMain from './components/dashboard/main';
+import AdminCustomers from './components/dashboard/customers';
+import AdminProfile from './components/dashboard/profile';
+
 import AuthGuard from './hoc/authGuard';
 
 const Router = () => {
@@ -43,7 +47,11 @@ const Router = () => {
                     <Dashboard />
                   </AuthGuard>
                 }
-              />
+              >
+                <Route index element={<DashboardMain />} />
+                <Route path="profile" element={<AdminProfile />} />
+                <Route path="customers" element={<AdminCustomers />} />
+              </Route>
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<Home />} />
             </Routes>

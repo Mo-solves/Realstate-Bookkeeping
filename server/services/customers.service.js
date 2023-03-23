@@ -1,6 +1,4 @@
 const httpStatus = require('http-status');
-const mongoose = require('mongoose');
-require('mongoose-double')(mongoose);
 const { Customer, History } = require('../models/customer');
 const { ApiError } = require('../middlewares/apiError');
 

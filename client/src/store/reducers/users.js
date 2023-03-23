@@ -8,6 +8,7 @@ let DEFAULT_USER_STATE = {
     email: null,
     firstname: null,
     lastname: null,
+    age: null,
     role: null,
     verified: null,
   },
@@ -17,7 +18,11 @@ let DEFAULT_USER_STATE = {
 export const usersSlice = createSlice({
   name: 'users',
   initialState: DEFAULT_USER_STATE,
-  reducers: {},
+  reducers: {
+    setVerify: state => {
+      state.data.verified = true;
+    },
+  },
   extraReducers: builder => {
     builder
       // REGISTER
@@ -32,7 +37,7 @@ export const usersSlice = createSlice({
       .addCase(registerUser.rejected, state => {
         state.loading = false;
       })
-      // SIGNIN
+      // SIGN IN
       .addCase(signInUser.pending, state => {
         state.loading = true;
       })
@@ -44,7 +49,7 @@ export const usersSlice = createSlice({
       .addCase(signInUser.rejected, state => {
         state.loading = false;
       })
-      // ISAUTH
+      // IS AUTH
       .addCase(isAuth.pending, state => {
         state.loading = true;
       })
@@ -56,7 +61,7 @@ export const usersSlice = createSlice({
       .addCase(isAuth.rejected, state => {
         state.loading = false;
       })
-      // SIGNOUT
+      // SIGN OUT
       .addCase(signOut.fulfilled, (state, action) => {
         state.data = DEFAULT_USER_STATE.data;
         state.auth = false;

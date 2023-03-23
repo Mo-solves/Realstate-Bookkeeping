@@ -1,14 +1,17 @@
 import { Container } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
 
-const MainLayout = props => {
-  return (
-    <Container className={`app_container mb-5`}>
-      {props.children}
-      <ToastContainer />
-    </Container>
-  );
-};
+const MainLayout = (props) => {
+    const site = useSelector(state => state.site);
 
-export default MainLayout;
+    return(
+        <Container className={`app_container mb-5 ${site.layout}`}>
+            {props.children}
+            <ToastContainer/>
+        </Container>
+    )
+}
+
+export default MainLayout
