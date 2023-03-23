@@ -12,7 +12,7 @@ const AdminLayout = props => {
               <ListItem button component={RouterLink} to="/dashboard/profile">
                 <ListItemText primary="Profile" />
               </ListItem>
-              {users.data.role === 'user' ? (
+              {users.data.role === 'admin' ? (
                 <>
                   <ListItem
                     button
