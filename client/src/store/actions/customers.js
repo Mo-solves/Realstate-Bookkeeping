@@ -22,3 +22,52 @@ export const addCustomer = createAsyncThunk(
     }
   }
 );
+
+export const getCustomerById = createAsyncThunk(
+  'customers/getCustomerById',
+  async (_id, { dispatch }) => {
+    try {
+      const request = await axios.get(
+        `/api/customers/customer/${_id}`,
+        getAuthHeader()
+      );
+      return request.data;
+    } catch (err) {
+      dispatch(errorGlobal(err.response.data.message));
+      throw err;
+    }
+  }
+);
+
+export const getCustomerHistory = createAsyncThunk(
+  'customers/getHistory',
+  async (customer, { dispatch }) => {
+    try {
+      if (customer.history != null) {
+        const request = await axios.get(
+          `/api/customers/customer/${customer._id}/history/${customer.phoneNumber}`,
+          getAuthHeader()
+        );
+        return request.data;
+      }
+    } catch (err) {
+      dispatch(errorGlobal(err.response.data.message));
+
+      throw err;
+    }
+  }
+);
+
+export const updateCustomer = createAsyncThunk(
+  'customers/updateCustomer',
+  async (values, customerId, { dispatch }) => {
+    try {
+      await axios.patch(`/api/customers/customer/${customerId}`, values);
+      dispatch(successGlobal('Customer Updated!!'));
+      return true;
+    } catch (err) {
+      dispatch(errorGlobal(err.response.data.message));
+      throw err;
+    }
+  }
+);

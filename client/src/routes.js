@@ -14,6 +14,10 @@ import DashboardMain from './components/dashboard/main';
 import AdminCustomers from './components/dashboard/customers';
 import AdminProfile from './components/dashboard/profile';
 import AddCustomer from './components/dashboard/customers/edit_add/add';
+import {
+  EditCustomer,
+  CustomerHistory,
+} from './components/dashboard/customers/edit_add/edit';
 
 import AuthGuard from './hoc/authGuard';
 
@@ -53,6 +57,14 @@ const Router = () => {
                 <Route path="profile" element={<AdminProfile />} />
                 <Route path="customers" element={<AdminCustomers />} />
                 <Route path="customers/add" element={<AddCustomer />} />
+                <Route
+                  path="customers/edit/:customerId"
+                  element={<EditCustomer />}
+                />
+                <Route
+                  path="customers/edit/:customerId"
+                  element={<CustomerHistory />}
+                />
               </Route>
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<Home />} />
