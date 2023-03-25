@@ -71,3 +71,38 @@ export const updateCustomer = createAsyncThunk(
     }
   }
 );
+
+export const getPaginateCustomers = createAsyncThunk(
+  'customers/paginate',
+  async ({ page = 1, limit = 5 }, { dispatch }) => {
+    try {
+      const response = await axios.post(
+        `/api/customers/admin/paginate`,
+        {
+          page,
+          limit,
+        },
+        getAuthHeader()
+      );
+      return response.data;
+    } catch (err) {
+      dispatch(errorGlobal(err.response.data.message));
+      throw err;
+    }
+  }
+);
+
+export const getAllCustomers = createAsyncThunk(
+  'customers/all',
+  async ({ _, dispatch }) => {
+    try {
+      const response = await axios.get(`/api/customers`);
+      console.log(response.data);
+      return response.data;
+    } catch (err) {
+      dispatch(errorGlobal(err.response.data.message));
+
+      throw err;
+    }
+  }
+);
