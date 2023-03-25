@@ -19,6 +19,7 @@ import Button from '@mui/material/Button';
 const AddCustomer = () => {
   // redux
   const customers = useSelector(state => state.customers);
+  console.log(customers);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

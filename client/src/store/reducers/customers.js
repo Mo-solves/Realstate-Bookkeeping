@@ -22,7 +22,7 @@ export const customersSlice = createSlice({
       .addCase(getPaginateCustomers.pending, state => (state.loading = true))
       .addCase(getPaginateCustomers.fulfilled, (state, action) => {
         state.loading = false;
-        state.adminCustomers = action.payload.data;
+        state.data = action.payload.data;
       })
       .addCase(getPaginateCustomers.rejected, state => {
         state.loading = false;
