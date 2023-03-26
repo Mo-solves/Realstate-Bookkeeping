@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 
-import DehazeIcon from '@mui/icons-material/Dehaze';
-import MailIcon from '@mui/icons-material/Mail';
-import HomeIcon from '@mui/icons-material/Home';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import DehazeIcon from "@mui/icons-material/Dehaze";
+import MailIcon from "@mui/icons-material/Mail";
+import HomeIcon from "@mui/icons-material/Home";
+import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 const SideDrawer = ({ users, signOutUser }) => {
   const [state, setState] = useState(false);
@@ -22,10 +22,10 @@ const SideDrawer = ({ users, signOutUser }) => {
     <>
       <DehazeIcon className="drawer_btn" onClick={() => setState(true)} />
 
-      <Drawer anchor={'right'} open={state} onClose={() => setState(false)}>
+      <Drawer anchor={"right"} open={state} onClose={() => setState(false)}>
         <Box sx={{ width: 200 }}>
           <List>
-            <ListItem
+            {/* <ListItem
               button
               component={RouterLink}
               to="/"
@@ -35,7 +35,7 @@ const SideDrawer = ({ users, signOutUser }) => {
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
-            </ListItem>
+            </ListItem> */}
 
             {/* <ListItem
                             button
@@ -53,7 +53,7 @@ const SideDrawer = ({ users, signOutUser }) => {
               <ListItem
                 button
                 component={RouterLink}
-                to="/auth"
+                to="/"
                 onClick={() => setState(false)}
               >
                 <ListItemIcon>

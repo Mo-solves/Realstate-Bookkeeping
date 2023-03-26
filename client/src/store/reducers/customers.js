@@ -1,33 +1,91 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { addCustomer, getPaginateCustomers } from '../actions/customers';
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  addCustomer,
+  // getCustomerById,
+  // updateCustomer,
+} from "../actions/customers";
+
+let DEFAULT_CUSTOMER_STATE = {
+  loading: false,
+  data: {
+    _id: null,
+    firstname: null,
+    lastname: null,
+    phoneNumber: null,
+    rentDue: null,
+    rentPaid: null,
+    location: null,
+    dueDate: null,
+    balance: null,
+    previousBalance: null,
+    remainingDays: null,
+    history: null,
+    startingDate: null,
+    createdDate: null,
+  },
+};
 
 export const customersSlice = createSlice({
-  name: 'customers',
-  initialState: {
-    loading: false,
-  },
+  name: "customers",
+  initialState: DEFAULT_CUSTOMER_STATE,
   reducers: {},
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
-      // Add Article
-      .addCase(addCustomer.pending, state => (state.loading = true))
+      // Add Customer
+      .addCase(addCustomer.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(addCustomer.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload.data;
+        state.lastAdded = action.payload;
       })
-      .addCase(addCustomer.rejected, state => {
-        state.loading = false;
-      })
-      // GET PAGINATE CUSTOMERS
-      .addCase(getPaginateCustomers.pending, state => (state.loading = true))
-      .addCase(getPaginateCustomers.fulfilled, (state, action) => {
-        state.loading = false;
-        state.data = action.payload.data;
-      })
-      .addCase(getPaginateCustomers.rejected, state => {
+      .addCase(addCustomer.rejected, (state) => {
         state.loading = false;
       });
+    // // Get Customer
+    // .addCase(getCustomerById.pending, (state) => {
+    //   state.loading = true;
+    // })
+    // .addCase(getCustomerById.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.customer = action.payload;
+    // })
+    // .addCase(getCustomerById.rejected, (state) => {
+    //   state.loading = false;
+    // })
+    // // Update Customer
+    // .addCase(updateCustomer.pending, (state) => {
+    //   state.loading = true;
+    // })
+    // .addCase(updateCustomer.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.data = action.payload.data;
+    // })
+    // .addCase(updateCustomer.rejected, (state) => {
+    //   state.loading = false;
+    // });
   },
+  // extraReducers: (builder) => {
+  //   builder;
+  //   // // Add Article
+  //   // .addCase(addCustomer.pending, (state) => (state.loading = true))
+  //   // .addCase(addCustomer.fulfilled, (state, action) => {
+  //   //   state.loading = false;
+  //   //   state.data = action.payload.data;
+  //   // })
+  //   // .addCase(addCustomer.rejected, (state) => {
+  //   //   state.loading = false;
+  //   // })
+  //   // // GET PAGINATE CUSTOMERS
+  //   // .addCase(getPaginateCustomers.pending, (state) => (state.loading = true))
+  //   // .addCase(getPaginateCustomers.fulfilled, (state, action) => {
+  //   //   state.loading = false;
+  //   //   state.data = action.payload.data;
+  //   // })
+  //   // .addCase(getPaginateCustomers.rejected, (state) => {
+  //   //   state.loading = false;
+  //   // });
+  // },
 });
 
 export default customersSlice.reducer;

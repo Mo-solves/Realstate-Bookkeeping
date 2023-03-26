@@ -1,20 +1,20 @@
-const httpStatus = require('http-status');
-const { Customer, History } = require('../models/customer');
-const { ApiError } = require('../middlewares/apiError');
+const httpStatus = require("http-status");
+const { Customer, History } = require("../models/customer");
+const { ApiError } = require("../middlewares/apiError");
 
-const addDaysToDueDate = days => {
+const addDaysToDueDate = (days) => {
   let date = new Date();
   date.setDate(date.getDate() + days);
   return date;
 };
 
-const calculateRemainingDays = dueDate => {
+const calculateRemainingDays = (dueDate) => {
   let differenceInTIme = dueDate.getTime() - new Date().getTime();
   let differenceInDays = differenceInTIme / (1000 * 3600 * 24);
   return Math.trunc(differenceInDays);
 };
 
-const createCustomerHistory = async customer => {
+const createCustomerHistory = async (customer) => {
   try {
     let history = new History({
       fullname: `${customer.firstname} ${customer.lastname}`,
@@ -34,7 +34,7 @@ const createCustomerHistory = async customer => {
   }
 };
 
-const updateCustomerBasedOnRemainingDays = customer => {
+const updateCustomerBasedOnRemainingDays = (customer) => {
   let differenceInTime = 0;
   let remainingDays = 0;
   customer.remainingDays = calculateRemainingDays(customer.dueDate);
@@ -54,7 +54,7 @@ const updateCustomerBasedOnRemainingDays = customer => {
   return customer;
 };
 
-const addCustomer = async body => {
+const addCustomer = async (body) => {
   let balance = parseInt(body.rentDue) - parseInt(body.rentPaid);
   let dueDate = addDaysToDueDate(30);
   let remainingDays = calculateRemainingDays(dueDate);
@@ -75,7 +75,7 @@ const addCustomer = async body => {
 const findAllCustomers = async () => {
   try {
     const customers = await Customer.find({});
-    if (!customers) throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
+    if (!customers) throw new ApiError(httpStatus.NOT_FOUND, "Not found");
     for (let customer of customers) {
       updateCustomerBasedOnRemainingDays(customer);
       await customer.save();
@@ -87,11 +87,11 @@ const findAllCustomers = async () => {
   }
 };
 
-const findCustomerById = async _id => {
+const findCustomerById = async (_id) => {
   try {
     const customer = await Customer.findById(_id);
     if (!customer)
-      throw new ApiError(httpStatus.NOT_FOUND, 'Customer not found');
+      throw new ApiError(httpStatus.NOT_FOUND, "Customer not found");
 
     // await customer.save();
     return customer;
@@ -100,10 +100,10 @@ const findCustomerById = async _id => {
   }
 };
 
-const findCustomerHistoryByPhoneNumber = async phoneNumber => {
+const findCustomerHistoryByPhoneNumber = async (phoneNumber) => {
   try {
     const history = await History.find({ phoneNumber });
-    if (!history) throw new ApiError(httpStatus.NOT_FOUND, 'History not found');
+    if (!history) throw new ApiError(httpStatus.NOT_FOUND, "History not found");
     return history;
   } catch (err) {
     throw err;
@@ -123,7 +123,7 @@ const findCustomerByIdAndUpdate = async (_id, body) => {
     );
 
     if (!customer)
-      throw new ApiError(httpStatus.NOT_FOUND, 'Customer not found');
+      throw new ApiError(httpStatus.NOT_FOUND, "Customer not found");
 
     customer.balance =
       customer.rentDue + customer.previousBalance - customer.rentPaid;
@@ -134,11 +134,11 @@ const findCustomerByIdAndUpdate = async (_id, body) => {
   }
 };
 
-const findCustomerByIdAndDelete = async _id => {
+const findCustomerByIdAndDelete = async (_id) => {
   try {
     const customer = await Customer.findByIdAndRemove(_id);
     if (!customer)
-      throw new ApiError(httpStatus.NOT_FOUND, 'Customer not found');
+      throw new ApiError(httpStatus.NOT_FOUND, "Customer not found");
 
     return customer;
   } catch (err) {
@@ -146,9 +146,9 @@ const findCustomerByIdAndDelete = async _id => {
   }
 };
 
-const allCustomers = async req => {
-  const sortby = req.query.sortby || '_id';
-  const order = req.query.order || 'desc';
+const allCustomers = async (req) => {
+  const sortby = req.query.sortby || "_id";
+  const order = req.query.order || "desc";
   const limit = req.query.limit || 2;
   try {
     const customers = await Customer.find({})
@@ -160,9 +160,9 @@ const allCustomers = async req => {
   }
 };
 
-const moreHistory = async req => {
-  const sortby = req.body.sortby || '_id';
-  const order = req.body.order || 'desc';
+const moreHistory = async (req) => {
+  const sortby = req.body.sortby || "_id";
+  const order = req.body.order || "desc";
   const limit = req.body.limit || 3;
   const skip = req.body.skip || 0;
   try {
@@ -179,7 +179,7 @@ const moreHistory = async req => {
   }
 };
 
-const paginateAdminCustomers = async req => {
+const paginateAdminCustomers = async (req) => {
   try {
     let aggQuery = Customer.aggregate();
     const limit = req.body.limit ? req.body.limit : 5;
@@ -187,7 +187,7 @@ const paginateAdminCustomers = async req => {
       page: req.body.page,
       limit,
       sort: {
-        _id: 'desc',
+        _id: "desc",
       },
     };
 

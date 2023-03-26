@@ -1,6 +1,6 @@
-const httpStatus = require('http-status');
+const httpStatus = require("http-status");
 
-const { customersService } = require('../services');
+const { customersService } = require("../services");
 
 const customersController = {
   async createCustomer(req, res, next) {
@@ -60,7 +60,7 @@ const customersController = {
     try {
       const _id = req.params.id;
       const customer = await customersService.findCustomerByIdAndDelete(_id);
-      res.status(httpStatus.OK).json({ action: 'deleted' });
+      res.status(httpStatus.OK).json({ action: "deleted" });
     } catch (err) {
       next(err);
     }

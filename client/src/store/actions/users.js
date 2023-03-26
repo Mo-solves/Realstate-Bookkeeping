@@ -1,12 +1,12 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { errorGlobal, successGlobal } from '../reducers/notifications';
-import { getAuthHeader, removeTokenCookie } from '../../utils/tools';
-import { setVerify } from '../reducers/users';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { errorGlobal, successGlobal } from "../reducers/notifications";
+import { getAuthHeader, removeTokenCookie } from "../../utils/tools";
+import { setVerify } from "../reducers/users";
 
-import axios from 'axios';
+import axios from "axios";
 
 export const registerUser = createAsyncThunk(
-  'users/registerUser',
+  "users/registerUser",
   async ({ email, password }, { dispatch }) => {
     try {
       const request = await axios.post(`/api/auth/register`, {
@@ -15,7 +15,7 @@ export const registerUser = createAsyncThunk(
       });
 
       dispatch(
-        successGlobal('Welcome !!.Check your emails to validate account')
+        successGlobal("Welcome !!.Check your emails to validate account")
       );
       return { data: request.data.user, auth: true };
     } catch (error) {
@@ -26,14 +26,14 @@ export const registerUser = createAsyncThunk(
 );
 
 export const signInUser = createAsyncThunk(
-  'users/signInUser',
+  "users/signInUser",
   async ({ email, password }, { dispatch }) => {
     try {
       const request = await axios.post(`/api/auth/signin`, {
         email: email,
         password: password,
       });
-      dispatch(successGlobal('Welcome !!'));
+      dispatch(successGlobal("Welcome !!"));
       return { data: request.data.user, auth: true };
     } catch (error) {
       dispatch(errorGlobal(error.response.data.message));
@@ -42,21 +42,21 @@ export const signInUser = createAsyncThunk(
   }
 );
 
-export const isAuth = createAsyncThunk('users/isAuth', async () => {
+export const isAuth = createAsyncThunk("users/isAuth", async () => {
   try {
-    const request = await axios.get('/api/auth/isauth', getAuthHeader());
+    const request = await axios.get("/api/auth/isauth", getAuthHeader());
     return { data: request.data, auth: true };
   } catch (error) {
     return { data: {}, auth: false };
   }
 });
 
-export const signOut = createAsyncThunk('users/signOut', async () => {
+export const signOut = createAsyncThunk("users/signOut", async () => {
   removeTokenCookie();
 });
 
 export const updateUserProfile = createAsyncThunk(
-  'users/updateUserProfile',
+  "users/updateUserProfile",
   async (data, { dispatch }) => {
     try {
       const profile = await axios.patch(
@@ -64,7 +64,7 @@ export const updateUserProfile = createAsyncThunk(
         data,
         getAuthHeader()
       );
-      dispatch(successGlobal('Profile Updated !!'));
+      dispatch(successGlobal("Profile Updated !!"));
       return {
         firstname: profile.data.firstname,
         lastname: profile.data.lastname,
@@ -78,7 +78,7 @@ export const updateUserProfile = createAsyncThunk(
 );
 
 export const changeEmail = createAsyncThunk(
-  'users/changeEmail',
+  "users/changeEmail",
   async (data, { dispatch }) => {
     try {
       const request = await axios.patch(
@@ -86,7 +86,7 @@ export const changeEmail = createAsyncThunk(
         { email: data.email, newemail: data.newemail },
         getAuthHeader()
       );
-      dispatch(successGlobal('Email Updated !!'));
+      dispatch(successGlobal("Email Updated !!"));
       return {
         email: request.data.user.email,
         verified: false,
@@ -100,7 +100,7 @@ export const changeEmail = createAsyncThunk(
 );
 
 export const accountVerify = createAsyncThunk(
-  'users/accountVerify',
+  "users/accountVerify",
   async (token, { dispatch, getState }) => {
     try {
       const user = getState().users.auth;
@@ -110,7 +110,7 @@ export const accountVerify = createAsyncThunk(
         dispatch(setVerify());
       }
 
-      dispatch(successGlobal('Account Verified !!'));
+      dispatch(successGlobal("Account Verified !!"));
     } catch (err) {
       dispatch(errorGlobal(err.response.data.message));
 

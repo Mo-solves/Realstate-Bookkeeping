@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 import {
   registerUser,
   signInUser,
@@ -6,7 +6,7 @@ import {
   signOut,
   updateUserProfile,
   changeEmail,
-} from '../actions/users';
+} from "../actions/users";
 
 let DEFAULT_USER_STATE = {
   loading: false,
@@ -15,7 +15,6 @@ let DEFAULT_USER_STATE = {
     email: null,
     firstname: null,
     lastname: null,
-    age: null,
     role: null,
     verified: null,
   },
@@ -23,17 +22,17 @@ let DEFAULT_USER_STATE = {
 };
 
 export const usersSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState: DEFAULT_USER_STATE,
   reducers: {
-    setVerify: state => {
+    setVerify: (state) => {
       state.data.verified = true;
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
       // REGISTER
-      .addCase(registerUser.pending, state => {
+      .addCase(registerUser.pending, (state) => {
         state.loading = true;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
@@ -41,11 +40,11 @@ export const usersSlice = createSlice({
         state.data = action.payload.data;
         state.auth = action.payload.auth;
       })
-      .addCase(registerUser.rejected, state => {
+      .addCase(registerUser.rejected, (state) => {
         state.loading = false;
       })
       // SIGN IN
-      .addCase(signInUser.pending, state => {
+      .addCase(signInUser.pending, (state) => {
         state.loading = true;
       })
       .addCase(signInUser.fulfilled, (state, action) => {
@@ -53,11 +52,11 @@ export const usersSlice = createSlice({
         state.data = action.payload.data;
         state.auth = action.payload.auth;
       })
-      .addCase(signInUser.rejected, state => {
+      .addCase(signInUser.rejected, (state) => {
         state.loading = false;
       })
       // IS AUTH
-      .addCase(isAuth.pending, state => {
+      .addCase(isAuth.pending, (state) => {
         state.loading = true;
       })
       .addCase(isAuth.fulfilled, (state, action) => {
@@ -65,7 +64,7 @@ export const usersSlice = createSlice({
         state.data = { ...state.data, ...action.payload.data };
         state.auth = action.payload.auth;
       })
-      .addCase(isAuth.rejected, state => {
+      .addCase(isAuth.rejected, (state) => {
         state.loading = false;
       })
       // SIGN OUT
@@ -78,14 +77,14 @@ export const usersSlice = createSlice({
         state.data = { ...state.data, ...action.payload };
       })
       // Change email
-      .addCase(changeEmail.pending, state => {
+      .addCase(changeEmail.pending, (state) => {
         state.loading = true;
       })
       .addCase(changeEmail.fulfilled, (state, action) => {
         state.loading = false;
         state.data = { ...state.data, ...action.payload.data };
       })
-      .addCase(changeEmail.rejected, state => {
+      .addCase(changeEmail.rejected, (state) => {
         state.loading = false;
       });
   },

@@ -1,20 +1,20 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { errorGlobal, successGlobal } from '../reducers/notifications';
-import { getAuthHeader } from '../../utils/tools';
-import axios from 'axios';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { errorGlobal, successGlobal } from "../reducers/notifications";
+import { getAuthHeader } from "../../utils/tools";
+import axios from "axios";
 
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.post["Content-Type"] = "application/json";
 
 export const addCustomer = createAsyncThunk(
-  'customers/addCustomer',
+  "customers/addCustomer",
   async (customer, { dispatch }) => {
     try {
       const request = await axios.post(
-        '/api/customers',
+        "/api/customers",
         customer,
         getAuthHeader()
       );
-      dispatch(successGlobal('Customer created!!'));
+      dispatch(successGlobal("Customer created!!"));
       return request.data;
     } catch (err) {
       dispatch(errorGlobal(err.response.data.message));
@@ -24,7 +24,7 @@ export const addCustomer = createAsyncThunk(
 );
 
 export const getCustomerById = createAsyncThunk(
-  'customers/getCustomerById',
+  "customers/getCustomerById",
   async (_id, { dispatch }) => {
     try {
       const request = await axios.get(
@@ -39,53 +39,16 @@ export const getCustomerById = createAsyncThunk(
   }
 );
 
-export const getCustomerHistory = createAsyncThunk(
-  'customers/getHistory',
-  async (customer, { dispatch }) => {
-    try {
-      if (customer.history != null) {
-        const request = await axios.get(
-          `/api/customers/customer/${customer._id}/history/${customer.phoneNumber}`,
-          getAuthHeader()
-        );
-        return request.data;
-      }
-    } catch (err) {
-      dispatch(errorGlobal(err.response.data.message));
-
-      throw err;
-    }
-  }
-);
-
 export const updateCustomer = createAsyncThunk(
-  'customers/updateCustomer',
-  async (values, customerId, { dispatch }) => {
+  "customers/updateCustomer",
+  async ({ values, customerId }, { dispatch }) => {
     try {
-      await axios.patch(`/api/customers/customer/${customerId}`, values);
-      dispatch(successGlobal('Customer Updated!!'));
-      return true;
-    } catch (err) {
-      dispatch(errorGlobal(err.response.data.message));
-      throw err;
-    }
-  }
-);
-
-export const getPaginateCustomers = createAsyncThunk(
-  'customers/getPaginateCustomers',
-  async ({ page = 1, limit = 3 }, { dispatch }) => {
-    try {
-      console.log(page);
-
-      const response = await axios.post(
-        `/api/customers/admin/paginate`,
-        {
-          page,
-          limit,
-        },
+      const response = await axios.patch(
+        `/api/customers/customer/${customerId}`,
+        values,
         getAuthHeader()
       );
+      dispatch(successGlobal("Customer Updated!!"));
       return response.data;
     } catch (err) {
       dispatch(errorGlobal(err.response.data.message));
@@ -94,34 +57,75 @@ export const getPaginateCustomers = createAsyncThunk(
   }
 );
 
-export const getAllCustomers = createAsyncThunk(
-  'customers/all',
-  async ({ dispatch }) => {
-    try {
-      const response = await axios.get(`/api/customers`);
-      console.log(response.data);
-      return response.data;
-    } catch (err) {
-      dispatch(errorGlobal(err.response.data.message));
+// export const getCustomerHistory = createAsyncThunk(
+//   'customers/getHistory',
+//   async (customer, { dispatch }) => {
+//     try {
+//       if (customer.history != null) {
+//         const request = await axios.get(
+//           `/api/customers/customer/${customer._id}/history/${customer.phoneNumber}`,
+//           getAuthHeader()
+//         );
+//         return request.data;
+//       }
+//     } catch (err) {
+//       dispatch(errorGlobal(err.response.data.message));
 
-      throw err;
-    }
-  }
-);
+//       throw err;
+//     }
+//   }
+// );
 
-export const removeCustomer = createAsyncThunk(
-  'customers/removeCustomer',
-  async (_id, { dispatch, getState }) => {
-    try {
-      await axios.delete(`/api/customers/customer/${_id}`, getAuthHeader());
-      dispatch(successGlobal('Customer Removed!!'));
-      let page = getState().customers.data.page;
-      dispatch(getPaginateCustomers({ page }));
-      return true;
-    } catch (err) {
-      dispatch(errorGlobal(err.response.data.message));
+// export const getPaginateCustomers = createAsyncThunk(
+//   'customers/getPaginateCustomers',
+//   async ({ page = 1, limit = 3 }, { dispatch }) => {
+//     try {
+//       console.log(page);
 
-      throw err;
-    }
-  }
-);
+//       const response = await axios.post(
+//         `/api/customers/admin/paginate`,
+//         {
+//           page,
+//           limit,
+//         },
+//         getAuthHeader()
+//       );
+//       return response.data;
+//     } catch (err) {
+//       dispatch(errorGlobal(err.response.data.message));
+//       throw err;
+//     }
+//   }
+// );
+
+// export const getAllCustomers = createAsyncThunk(
+//   'customers/all',
+//   async ({ dispatch }) => {
+//     try {
+//       const response = await axios.get(`/api/customers`);
+//       console.log(response.data);
+//       return response.data;
+//     } catch (err) {
+//       dispatch(errorGlobal(err.response.data.message));
+
+//       throw err;
+//     }
+//   }
+// );
+
+// export const removeCustomer = createAsyncThunk(
+//   'customers/removeCustomer',
+//   async (_id, { dispatch, getState }) => {
+//     try {
+//       await axios.delete(`/api/customers/customer/${_id}`, getAuthHeader());
+//       dispatch(successGlobal('Customer Removed!!'));
+//       let page = getState().customers.data.page;
+//       dispatch(getPaginateCustomers({ page }));
+//       return true;
+//     } catch (err) {
+//       dispatch(errorGlobal(err.response.data.message));
+
+//       throw err;
+//     }
+//   }
+// );
