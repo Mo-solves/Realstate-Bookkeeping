@@ -19,6 +19,8 @@ import {
   CustomerHistory,
 } from './components/dashboard/customers/edit_add/edit';
 
+import AccountVerify from './components/auth/verification';
+
 import AuthGuard from './hoc/authGuard';
 
 const Router = () => {
@@ -57,6 +59,7 @@ const Router = () => {
                 <Route path="profile" element={<AdminProfile />} />
                 <Route path="customers" element={<AdminCustomers />} />
                 <Route path="customers/add" element={<AddCustomer />} />
+
                 <Route
                   path="customers/edit/:customerId"
                   element={<EditCustomer />}
@@ -66,6 +69,7 @@ const Router = () => {
                   element={<CustomerHistory />}
                 />
               </Route>
+              <Route path="/verification" element={<AccountVerify />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<Home />} />
             </Routes>

@@ -46,6 +46,9 @@ const Header = () => {
 
   return (
     <>
+      {!users.data.verified && users.auth ? (
+        <div className="not_verified">Not Verified</div>
+      ) : null}
       <nav className={`navbar fixed-top ${site.layout}`}>
         <Link
           to="/"
