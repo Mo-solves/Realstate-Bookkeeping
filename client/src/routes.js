@@ -19,7 +19,7 @@ import {
   // CustomerHistory,
 } from "./components/dashboard/customers/edit_add/edit";
 
-// import AccountVerify from './components/auth/verification';
+import AccountVerify from "./components/auth/verification";
 
 import AuthGuard from "./hoc/authGuard";
 
@@ -71,7 +71,7 @@ const Router = () => {
                   element={<CustomerHistory />}
                 /> */}
               </Route>
-              {/* <Route path="/verification" element={<AccountVerify />} /> */}
+              <Route path="/verification" element={<AccountVerify />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<Auth />} />
               {/* <Route path="/" element={<Home />} /> */}

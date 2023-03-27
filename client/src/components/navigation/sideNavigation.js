@@ -25,30 +25,6 @@ const SideDrawer = ({ users, signOutUser }) => {
       <Drawer anchor={"right"} open={state} onClose={() => setState(false)}>
         <Box sx={{ width: 200 }}>
           <List>
-            {/* <ListItem
-              button
-              component={RouterLink}
-              to="/"
-              onClick={() => setState(false)}
-            >
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItem> */}
-
-            {/* <ListItem
-                            button
-                            component={RouterLink}
-                            to="/contact"
-                            onClick={()=> setState(false)}
-                        >
-                            <ListItemIcon>
-                                <MailIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Contact"/>
-                        </ListItem> */}
-
             {!users.auth ? (
               <ListItem
                 button

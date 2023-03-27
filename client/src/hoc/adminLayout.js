@@ -1,8 +1,8 @@
-import { Link as RouterLink } from 'react-router-dom';
-import { List, ListItem, ListItemText } from '@mui/material';
-import { useSelector } from 'react-redux';
-const AdminLayout = props => {
-  const users = useSelector(state => state.users);
+import { Link as RouterLink } from "react-router-dom";
+import { List, ListItem, ListItemText } from "@mui/material";
+import { useSelector } from "react-redux";
+const AdminLayout = (props) => {
+  const users = useSelector((state) => state.users);
   return (
     <>
       <div className="row adminLayout">
@@ -12,7 +12,7 @@ const AdminLayout = props => {
               <ListItem button component={RouterLink} to="/dashboard/profile">
                 <ListItemText primary="Profile" />
               </ListItem>
-              {users.data.role === 'admin' ? (
+              {users.data.verified ? (
                 <>
                   <ListItem
                     button

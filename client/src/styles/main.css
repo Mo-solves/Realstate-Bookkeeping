@@ -221,10 +221,10 @@ nav .nav-link {
 .actors_form .MuiButtonBase-root {
   border-bottom: 0px;
 }
-.article_form {
+.customer_form {
   padding-bottom: 50px;
 }
-.article_form .MuiSelect-root {
+.customer_form .MuiSelect-root {
   min-width: 200px;
 }
 

@@ -1,18 +1,18 @@
-const { User } = require('../models/user');
-const { ApiError } = require('../middlewares/apiError');
-const httpStatus = require('http-status');
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const { User } = require("../models/user");
+const { ApiError } = require("../middlewares/apiError");
+const httpStatus = require("http-status");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
-const findUserByEmail = async email => {
+const findUserByEmail = async (email) => {
   return await User.findOne({ email });
 };
 
-const findUserById = async _id => {
+const findUserById = async (_id) => {
   return await User.findById({ _id });
 };
 
-const updateUserProfile = async req => {
+const updateUserProfile = async (req) => {
   try {
     const user = await User.findOneAndUpdate(
       { _id: req.user._id },
@@ -25,7 +25,7 @@ const updateUserProfile = async req => {
       { new: true }
     );
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+      throw new ApiError(httpStatus.NOT_FOUND, "User not found");
     }
     return user;
   } catch (err) {
@@ -33,10 +33,10 @@ const updateUserProfile = async req => {
   }
 };
 
-const updateUserEmail = async req => {
+const updateUserEmail = async (req) => {
   try {
     if (await User.emailTaken(req.body.newemail)) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Sorry email taken');
+      throw new ApiError(httpStatus.NOT_FOUND, "Sorry email taken");
     }
     const user = await User.findOneAndUpdate(
       { _id: req.user._id, email: req.user.email },
@@ -50,7 +50,7 @@ const updateUserEmail = async req => {
     );
 
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+      throw new ApiError(httpStatus.NOT_FOUND, "User not found");
     }
     return user;
   } catch (err) {
@@ -58,7 +58,7 @@ const updateUserEmail = async req => {
   }
 };
 
-const validateToken = token => {
+const validateToken = (token) => {
   return jwt.verify(token, process.env.DB_SECRET);
 };
 

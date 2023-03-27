@@ -13,8 +13,8 @@ let DEFAULT_USER_STATE = {
   data: {
     _id: null,
     email: null,
-    firstname: null,
-    lastname: null,
+    firstname: "",
+    lastname: "",
     role: null,
     verified: null,
   },
