@@ -57,24 +57,24 @@ export const updateCustomer = createAsyncThunk(
   }
 );
 
-// export const getCustomerHistory = createAsyncThunk(
-//   'customers/getHistory',
-//   async (customer, { dispatch }) => {
-//     try {
-//       if (customer.history != null) {
-//         const request = await axios.get(
-//           `/api/customers/customer/${customer._id}/history/${customer.phoneNumber}`,
-//           getAuthHeader()
-//         );
-//         return request.data;
-//       }
-//     } catch (err) {
-//       dispatch(errorGlobal(err.response.data.message));
+export const getCustomerHistory = createAsyncThunk(
+  "customers/getHistory",
+  async (customer, { dispatch }) => {
+    try {
+      if (customer.history != null) {
+        const request = await axios.get(
+          `/api/customers/customer/${customer._id}/history/${customer.phoneNumber}`,
+          getAuthHeader()
+        );
+        return request.data;
+      }
+    } catch (err) {
+      dispatch(errorGlobal(err.response.data.message));
 
-//       throw err;
-//     }
-//   }
-// );
+      throw err;
+    }
+  }
+);
 
 export const getPaginateCustomers = createAsyncThunk(
   "customers/getPaginateCustomers",
