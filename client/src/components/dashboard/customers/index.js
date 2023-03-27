@@ -1,11 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AdminTitle } from "../../../utils/tools";
 import PaginateComponent from "./paginate";
 
 import { useSelector, useDispatch } from "react-redux";
-import { getPaginateCustomers } from "../../../store/actions/customers";
 import {
+  getPaginateCustomers,
+  removeCustomer,
+} from "../../../store/actions/customers";
+import {
+  Modal,
   Button,
   ButtonToolbar,
   ButtonGroup,
@@ -19,6 +23,24 @@ const AdminCustomers = () => {
   const customers = useSelector((state) => state.customers);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [removeAlert, setRemoveAlert] = useState(false);
+  const [toRemove, setToRemove] = useState(null);
+
+  const handleClose = () => setRemoveAlert(false);
+  const handleShow = (id = null) => {
+    setToRemove(id);
+    setRemoveAlert(true);
+  };
+
+  const handleDelete = () => {
+    dispatch(removeCustomer(toRemove))
+      .unwrap()
+      .finally(() => {
+        setRemoveAlert(false);
+        setToRemove(null);
+      });
+  };
 
   //// START PAGINATION COMMANDS
   const goToPrevpage = (page) => {
@@ -62,8 +84,24 @@ const AdminCustomers = () => {
             goToPrevpage={(page) => goToPrevpage(page)}
             goToNextpage={(page) => goToNextpage(page)}
             goToEdit={(id) => goToEdit(id)}
+            handleShow={(id) => handleShow(id)}
           />
         </>
+
+        <Modal show={removeAlert} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Are you really Sure??</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>There is no going back</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Oops, close this
+            </Button>
+            <Button variant="danger" onClick={() => handleDelete()}>
+              Delete
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </>
   );

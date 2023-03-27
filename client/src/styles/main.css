@@ -266,6 +266,7 @@ nav .nav-link {
 .customers_table .remove_btn:hover {
   background: #ee7782;
   color: white !important;
+  cursor: pointer;
 }
 
 .customers_table .edit_btn {
@@ -275,6 +276,7 @@ nav .nav-link {
 .customers_table .edit_btn:hover {
   background: #3d99a8;
   color: white !important;
+  cursor: pointer;
 }
 
 .customers_table .status_btn {

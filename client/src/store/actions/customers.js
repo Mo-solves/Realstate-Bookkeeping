@@ -80,8 +80,6 @@ export const getPaginateCustomers = createAsyncThunk(
   "customers/getPaginateCustomers",
   async ({ page = 1, limit = 5 }, { dispatch }) => {
     try {
-      console.log(page);
-
       const response = await axios.post(
         `/api/customers/admin/paginate`,
         {
@@ -113,19 +111,19 @@ export const getPaginateCustomers = createAsyncThunk(
 //   }
 // );
 
-// export const removeCustomer = createAsyncThunk(
-//   'customers/removeCustomer',
-//   async (_id, { dispatch, getState }) => {
-//     try {
-//       await axios.delete(`/api/customers/customer/${_id}`, getAuthHeader());
-//       dispatch(successGlobal('Customer Removed!!'));
-//       let page = getState().customers.data.page;
-//       dispatch(getPaginateCustomers({ page }));
-//       return true;
-//     } catch (err) {
-//       dispatch(errorGlobal(err.response.data.message));
+export const removeCustomer = createAsyncThunk(
+  "customers/removeCustomer",
+  async (_id, { dispatch, getState }) => {
+    try {
+      await axios.delete(`/api/customers/customer/${_id}`, getAuthHeader());
+      dispatch(successGlobal("Customer Removed!!"));
+      let page = getState().customers.adminCustomers.page;
+      dispatch(getPaginateCustomers({ page }));
+      return true;
+    } catch (err) {
+      dispatch(errorGlobal(err.response.data.message));
 
-//       throw err;
-//     }
-//   }
-// );
+      throw err;
+    }
+  }
+);
