@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addCustomer,
-  // getCustomerById,
+  getPaginateCustomers,
   // updateCustomer,
 } from "../actions/customers";
 
@@ -41,18 +41,19 @@ export const customersSlice = createSlice({
       })
       .addCase(addCustomer.rejected, (state) => {
         state.loading = false;
+      })
+      // Get Paginate
+      .addCase(getPaginateCustomers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getPaginateCustomers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminCustomers = action.payload;
+      })
+      .addCase(getPaginateCustomers.rejected, (state) => {
+        state.loading = false;
       });
-    // // Get Customer
-    // .addCase(getCustomerById.pending, (state) => {
-    //   state.loading = true;
-    // })
-    // .addCase(getCustomerById.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.customer = action.payload;
-    // })
-    // .addCase(getCustomerById.rejected, (state) => {
-    //   state.loading = false;
-    // })
+
     // // Update Customer
     // .addCase(updateCustomer.pending, (state) => {
     //   state.loading = true;

@@ -76,10 +76,6 @@ const findAllCustomers = async () => {
   try {
     const customers = await Customer.find({});
     if (!customers) throw new ApiError(httpStatus.NOT_FOUND, "Not found");
-    for (let customer of customers) {
-      updateCustomerBasedOnRemainingDays(customer);
-      await customer.save();
-    }
 
     return customers;
   } catch (err) {
@@ -93,7 +89,8 @@ const findCustomerById = async (_id) => {
     if (!customer)
       throw new ApiError(httpStatus.NOT_FOUND, "Customer not found");
 
-    // await customer.save();
+    updateCustomerBasedOnRemainingDays(customer);
+    await customer.save();
     return customer;
   } catch (err) {
     throw err;
