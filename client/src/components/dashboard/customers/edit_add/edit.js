@@ -18,11 +18,13 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
 import Moment from "react-moment";
+import { Table } from "react-bootstrap";
 
 export const EditCustomer = () => {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState(formValues);
   const [history, setHistory] = useState("");
+  const user = useSelector((state) => state.users.data);
   // const customers = useSelector((state) => state.customers.customer);
   const dispatch = useDispatch();
   let { customerId } = useParams();
@@ -53,16 +55,31 @@ export const EditCustomer = () => {
         <Loader />
       ) : (
         <>
-          <h2>Remaining Days: {formData.remainingDays}</h2>
-          <h3>Previous Balance: {formData.previousBalance}</h3>
-          <h3>Balance: {formData.balance}</h3>
-          <h3>
-            StartingDate:{" "}
-            {<Moment format="DD/MM/YYYY">{formData.StartingDate}</Moment>}
-          </h3>
-          <h3>
-            dueDate: {<Moment format="DD/MM/YYYY">{formData.dueDate}</Moment>}
-          </h3>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <td>Starting Date</td>
+                <td>Due Date</td>
+                <td>Remaining Days</td>
+                <td>Previus Balance</td>
+                <td>Balance</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  {<Moment format="DD/MM/YYYY">{formData.StartingDate}</Moment>}
+                </td>
+                <td>
+                  {<Moment format="DD/MM/YYYY">{formData.dueDate}</Moment>}
+                </td>
+                <td>{formData.remainingDays}</td>
+                <td>{formData.previousBalance}</td>
+                <td>{formData.balance}</td>
+              </tr>
+            </tbody>
+          </Table>
+
           <form onSubmit={formik.handleSubmit}>
             <div className="form-group">
               <TextField
@@ -170,27 +187,41 @@ export const CustomerHistory = ({
         <Loader />
       ) : (
         <>
-          {history.map((history) => {
-            return (
-              <>
-                {" "}
-                <h1>History</h1>
-                <h2>{`${formData.firstname} ${formData.lastname}`}</h2>
-                <h3>rent Due: {history.rentDue}</h3>
-                <h3>rent Paid: {history.rentPaid}</h3>
-                <h3>Balance: {history.balance}</h3>
-                <h3>Previous Balance: {history.previousBalance}</h3>
-                <h3>
-                  StartingDate:{" "}
-                  {<Moment format="DD/MM/YYYY">{history.StartingDate}</Moment>}
-                </h3>
-                <h3>
-                  dueDate:{" "}
-                  {<Moment format="DD/MM/YYYY">{history.dueDate}</Moment>}
-                </h3>{" "}
-              </>
-            );
-          })}
+          <h1 className="mt-4">Customer History</h1>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <td>Starting Date</td>
+                <td>Due Date</td>
+                <td>Full Name</td>
+                <td>Rent Due</td>
+                <td>Rent Paid</td>
+                <td>Balance</td>
+              </tr>
+            </thead>
+            <tbody>
+              {history.map((history) => {
+                return (
+                  <tr key={history._id}>
+                    <td>
+                      {
+                        <Moment format="DD/MM/YYYY">
+                          {history.StartingDate}
+                        </Moment>
+                      }
+                    </td>
+                    <td>
+                      {<Moment format="DD/MM/YYYY">{history.dueDate}</Moment>}
+                    </td>
+                    <td>{`${formData.firstname} ${formData.lastname}`}</td>
+                    <td>{history.rentDue}</td>
+                    <td>{history.rentPaid}</td>
+                    <td>{history.balance}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
         </>
       )}
     </>
